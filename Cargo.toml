@@ -1,0 +1,9 @@
+[package]
+name = "parser"
+version = "0.1.0"
+authors = ["Syver <syver.storm.furru@gmail.com>"]
+
+[dependencies]
+serde_json = "1.0.24"
+serde_derive = "1.0.70"
+serde = "1.0.70"
