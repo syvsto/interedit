@@ -1,4 +1,5 @@
 use super::TokenizedFile;
+use super::error::ParseError;
 
 #[derive(Debug)]
 struct EvalStack {
@@ -90,7 +91,7 @@ impl ToString for EvalResult {
     }
 }
 
-pub fn evaluate(file: &TokenizedFile) -> Result<Vec<EvalResult>, String> {
+pub fn evaluate(file: &TokenizedFile) -> Result<Vec<EvalResult>, ParseError> {
     let mut results = Vec::new();
 
     for f in file.algorithms.iter() {
@@ -122,7 +123,7 @@ fn parse_algorithm(
     algorithm_string: &str,
     file: &TokenizedFile,
     eval_stack: &mut EvalStack,
-) -> Result<(), String> {
+) -> Result<(), ParseError> {
     let algorithm = algorithm_string.split(' ');
     let vals: Vec<AlgorithmOpOrArg> = algorithm.map(|s| parse_arg(s, file)).collect();
 

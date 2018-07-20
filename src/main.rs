@@ -3,8 +3,10 @@ extern crate serde_json;
 #[macro_use]
 extern crate serde_derive;
 
-use serde_json::Error;
+#[macro_use]
+extern crate failure;
 
+mod error;
 mod evaluator;
 
 const ALGORITHM: u32 = 0;
@@ -48,7 +50,7 @@ struct ValueToken {
     val: i32,
 }
 
-fn deserialize() -> Result<TokenizedFile, Error> {
+fn deserialize() -> Result<TokenizedFile, failure::Error> {
     let j = r#"
     {
         "text": [
@@ -119,7 +121,7 @@ fn build_output(text: &mut TokenizedFile, evaluations: &mut Vec<evaluator::EvalR
     string.join("")
 }
 
-fn main() -> Result<(), Error> {
+fn main() -> Result<(), failure::Error> {
     let mut file = deserialize()?;
     let mut evaluations = evaluator::evaluate(&file).unwrap();
     println!("build_output = {:?}", build_output(&mut file, &mut evaluations));
