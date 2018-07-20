@@ -69,6 +69,12 @@ enum AlgorithmOp {
     None,
 }
 
+#[derive(Copy, Clone, Debug)]
+enum AlgorithmOpOrArg {
+    Op(AlgorithmOp),
+    Arg(i32),
+}
+
 #[derive(Debug)]
 pub enum EvalResult {
     Int(i32),
@@ -98,14 +104,17 @@ pub fn evaluate(file: &TokenizedFile) -> Result<Vec<EvalResult>, String> {
     Ok(results)
 }
 
-fn parse_arg(arg: &str, file: &TokenizedFile) -> i32 {
+fn parse_arg(arg: &str, file: &TokenizedFile) -> AlgorithmOpOrArg {
     let mut chars = arg.chars();
-    if chars.next().unwrap() == ':' {
+    let identifier = chars.next().unwrap();
+    if identifier == ':' {
         let id_str = chars.collect::<String>();
         let ep = file.find_value_by_id(id_str.parse().unwrap()).unwrap();
-        ep.val
+        AlgorithmOpOrArg::Arg(ep.val)
+    } else if identifier.is_digit(10) {
+        AlgorithmOpOrArg::Arg(arg.parse().unwrap())
     } else {
-        arg.parse().unwrap()
+        AlgorithmOpOrArg::Op(parse_op(arg))
     }
 }
 
@@ -114,11 +123,15 @@ fn parse_algorithm(
     file: &TokenizedFile,
     eval_stack: &mut EvalStack,
 ) -> Result<(), String> {
-    let mut algorithm = algorithm_string.split(' ');
-    let op = parse_op(algorithm.next().unwrap());
-    let vals: Vec<i32> = algorithm.map(|s| parse_arg(s, file)).collect();
-    eval_stack.add_op(op);
-    vals.iter().for_each(move |v| eval_stack.add_val(*v));
+    let algorithm = algorithm_string.split(' ');
+    let vals: Vec<AlgorithmOpOrArg> = algorithm.map(|s| parse_arg(s, file)).collect();
+
+    for v in vals.iter() {
+        match v {
+            AlgorithmOpOrArg::Arg(v) => eval_stack.add_val(*v),
+            AlgorithmOpOrArg::Op(op) => eval_stack.add_op(*op),
+        } 
+    }
     Ok(())
 }
 

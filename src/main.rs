@@ -48,7 +48,7 @@ struct ValueToken {
     val: i32,
 }
 
-fn deserialize_to_tokens() -> Result<TokenizedFile, Error> {
+fn deserialize() -> Result<TokenizedFile, Error> {
     let j = r#"
     {
         "text": [
@@ -120,7 +120,7 @@ fn build_output(text: &mut TokenizedFile, evaluations: &mut Vec<evaluator::EvalR
 }
 
 fn main() -> Result<(), Error> {
-    let mut file = deserialize_to_tokens()?;
+    let mut file = deserialize()?;
     let mut evaluations = evaluator::evaluate(&file).unwrap();
     println!("build_output = {:?}", build_output(&mut file, &mut evaluations));
     Ok(())
