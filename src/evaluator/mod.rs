@@ -1,5 +1,7 @@
+mod error;
+
 use super::TokenizedFile;
-use super::error::ParseError;
+use self::error::ParseError;
 
 #[derive(Debug)]
 struct EvalStack {
@@ -124,6 +126,10 @@ fn parse_algorithm(
     file: &TokenizedFile,
     eval_stack: &mut EvalStack,
 ) -> Result<(), ParseError> {
+    if algorithm_string == "" {
+        return Err(ParseError::Algorithm);
+    }
+
     let algorithm = algorithm_string.split(' ');
     let vals: Vec<AlgorithmOpOrArg> = algorithm.map(|s| parse_arg(s, file)).collect();
 
