@@ -1,7 +1,7 @@
 mod error;
 
-use super::TokenizedFile;
 use self::error::ParseError;
+use super::TokenizedFile;
 
 #[derive(Debug)]
 struct EvalStack {
@@ -137,7 +137,7 @@ fn parse_algorithm(
         match v {
             AlgorithmOpOrArg::Arg(v) => eval_stack.add_val(*v),
             AlgorithmOpOrArg::Op(op) => eval_stack.add_op(*op),
-        } 
+        }
     }
     Ok(())
 }

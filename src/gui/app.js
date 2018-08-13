@@ -9,8 +9,9 @@ var rpc = {
 var runAlert = function(target) {
     if (target.className === "value") {
         window.alert("Value with id: " + target.id);
-    } else if (target.className === "expression") {
+    } else if (target.className === "evaluation") {
         window.alert("Expression clicked");
+    }
 };
 
 window.onload = function() {
