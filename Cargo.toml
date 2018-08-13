@@ -1,10 +1,14 @@
+cargo-features = ["edition"]
+
 [package]
 name = "parser"
 version = "0.1.0"
 authors = ["Syver <syver.storm.furru@gmail.com>"]
+edition = '2018'
 
 [dependencies]
 serde_json = "1.0.24"
 serde_derive = "1.0.70"
 serde = "1.0.70"
 failure = "0.1.1"
+web-view = "0.2.1"
